@@ -1,0 +1,23 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script_stop: true
+          script: |
+            cd /opt/actual-budget
+            git pull origin master
+            yarn install --immutable
+            yarn build:server
+            sudo systemctl restart actual-budget
