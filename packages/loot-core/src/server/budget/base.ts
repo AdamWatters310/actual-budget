@@ -343,11 +343,14 @@ export async function createBudget(months) {
     });
 
     if (budgetType === 'envelope') {
+      const nextMonth = monthUtils.nextMonth(month);
+      const nextSheetName = monthUtils.sheetForMonth(nextMonth);
       envelopeBudget.createSummary(
         groups,
         categories,
         prevSheetName,
         sheetName,
+        nextSheetName,
       );
     } else {
       trackingBudget.createSummary(groups, sheetName);

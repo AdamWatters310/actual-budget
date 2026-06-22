@@ -13,6 +13,11 @@ function getBlankSheet(months) {
   return monthUtils.sheetForMonth(blankMonth);
 }
 
+function getEndBlankSheet(months) {
+  const endMonth = monthUtils.nextMonth(months[months.length - 1]);
+  return monthUtils.sheetForMonth(endMonth);
+}
+
 export function createBlankCategory(cat, months) {
   if (months.length > 0) {
     const sheetName = getBlankSheet(months);
@@ -28,6 +33,11 @@ function createBlankMonth(categories, sheetName, months) {
   sheet.get().createStatic(sheetName, 'buffered', 0);
 
   categories.forEach(cat => createBlankCategory(cat, months));
+}
+
+function createBlankEndMonth(sheetName) {
+  sheet.get().createStatic(sheetName, 'total-budgeted', 0);
+  sheet.get().createStatic(sheetName, 'total-budgeted-future', 0);
 }
 
 export function createCategory(cat, sheetName, prevSheetName) {
@@ -95,7 +105,13 @@ export function createCategoryGroup(group, sheetName) {
   }
 }
 
-export function createSummary(groups, categories, prevSheetName, sheetName) {
+export function createSummary(
+  groups,
+  categories,
+  prevSheetName,
+  sheetName,
+  nextSheetName,
+) {
   const incomeGroup = groups.filter(group => group.is_income)[0];
   const expenseCategories = categories.filter(cat => !cat.is_income);
   const incomeCategories = categories.filter(cat => cat.is_income);
@@ -223,6 +239,25 @@ export function createSummary(groups, categories, prevSheetName, sheetName) {
       .map(group => `group-leftover-${group.id}`),
     run: sumAmounts,
   });
+
+  sheet.get().createDynamic(sheetName, 'total-budgeted-future', {
+    initialValue: 0,
+    dependencies: [
+      `${nextSheetName}!total-budgeted`,
+      `${nextSheetName}!total-budgeted-future`,
+    ],
+    run: (nextBudgeted, nextFuture) => {
+      return safeNumber(number(nextBudgeted) + number(nextFuture));
+    },
+  });
+
+  sheet.get().createDynamic(sheetName, 'to-budget-display', {
+    initialValue: 0,
+    dependencies: ['to-budget', 'total-budgeted-future'],
+    run: (toBudget, futureBudgeted) => {
+      return safeNumber(number(toBudget) + number(futureBudgeted));
+    },
+  });
 }
 
 export function createBudget(meta, categories, months) {
@@ -234,6 +269,22 @@ export function createBudget(meta, categories, months) {
     sheet.get().clearSheet(meta.blankSheet);
     createBlankMonth(categories, blankSheet, months);
     meta.blankSheet = blankSheet;
+  }
+
+  const endBlankSheet = getEndBlankSheet(months);
+  if (meta.endBlankSheet !== endBlankSheet) {
+    if (meta.endBlankSheet) {
+      sheet.get().clearSheet(meta.endBlankSheet);
+    }
+    createBlankEndMonth(endBlankSheet);
+    meta.endBlankSheet = endBlankSheet;
+  }
+
+  // Force recreation of all months when upgrading to include
+  // future-budgeted tracking
+  if (!meta.hasFutureBudgetedCells) {
+    meta.createdMonths = new Set();
+    meta.hasFutureBudgetedCells = true;
   }
 }
 
