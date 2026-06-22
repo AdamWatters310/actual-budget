@@ -154,7 +154,8 @@ export const envelopeBudget = {
   lastMonthOverspent: 'last-month-overspent',
   forNextMonth: 'buffered-selected',
   totalBudgeted: 'total-budgeted',
-  toBudget: 'to-budget',
+  totalBudgetedFuture: 'total-budgeted-future',
+  toBudget: 'to-budget-display',
 
   fromLastMonth: 'from-last-month',
   manualBuffered: 'buffered',

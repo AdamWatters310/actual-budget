@@ -139,6 +139,19 @@ export function TotalsList({ prevMonthName, style }: TotalsListProps) {
             />
           )}
         </EnvelopeCellValue>
+
+        <EnvelopeCellValue
+          binding={envelopeBudget.totalBudgetedFuture}
+          type="financial"
+        >
+          {props => (
+            <CellValueText
+              {...props}
+              style={{ fontWeight: 600 }}
+              formatter={signedFormatter}
+            />
+          )}
+        </EnvelopeCellValue>
       </View>
 
       <View>
@@ -156,6 +169,10 @@ export function TotalsList({ prevMonthName, style }: TotalsListProps) {
 
         <Block>
           <Trans>For next month</Trans>
+        </Block>
+
+        <Block>
+          <Trans>Budgeted in future</Trans>
         </Block>
       </View>
     </View>

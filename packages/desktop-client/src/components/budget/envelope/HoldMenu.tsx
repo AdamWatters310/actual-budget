@@ -17,9 +17,12 @@ type HoldMenuProps = {
 export function HoldMenu({ onSubmit, onClose }: HoldMenuProps) {
   const [amount, setAmount] = useState<IntegerAmount | null>(null);
 
-  useSheetValue<'envelope-budget', 'to-budget'>('to-budget', ({ value }) => {
-    setAmount(Math.max(value || 0, 0));
-  });
+  useSheetValue<'envelope-budget', 'to-budget-display'>(
+    'to-budget-display',
+    ({ value }) => {
+      setAmount(Math.max(value || 0, 0));
+    },
+  );
 
   if (amount === null) {
     // See `TransferMenu` for more info about this

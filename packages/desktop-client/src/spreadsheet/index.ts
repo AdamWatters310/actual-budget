@@ -40,6 +40,8 @@ export type Spreadsheets = {
     'to-budget': number | null;
     'from-last-month': number;
     'total-budgeted': number;
+    'total-budgeted-future': number;
+    'to-budget-display': number;
     'total-income': number;
     'total-spent': number;
     'total-leftover': number;

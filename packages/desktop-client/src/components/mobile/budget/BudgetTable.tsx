@@ -60,7 +60,7 @@ export function getColumnWidth({
 }
 
 type ToBudgetProps = {
-  toBudget: Binding<'envelope-budget', 'to-budget'>;
+  toBudget: Binding<'envelope-budget', 'to-budget-display'>;
   onPress: () => void;
   show3Columns: boolean;
 };
