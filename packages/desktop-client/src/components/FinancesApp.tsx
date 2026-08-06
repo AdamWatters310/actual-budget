@@ -39,6 +39,7 @@ import { NarrowAlternate, WideComponent } from './responsive';
 import { useMultiuserEnabled } from './ServerContext';
 import { Settings } from './settings';
 import { FloatableSidebar } from './sidebar';
+import { Spending } from './spending';
 import { ManageTagsPage } from './tags/ManageTagsPage';
 import { Titlebar } from './Titlebar';
 
@@ -260,6 +261,18 @@ export function FinancesApp() {
                   />
 
                   <Route path="/reports/*" element={<Reports />} />
+
+                  <Route
+                    path="/spending"
+                    element={
+                      <ErrorBoundary
+                        FallbackComponent={FeatureErrorFallback}
+                        resetKeys={[location.pathname]}
+                      >
+                        <Spending />
+                      </ErrorBoundary>
+                    }
+                  />
 
                   <Route
                     path="/budget"

@@ -96,6 +96,9 @@ export type LocalPrefs = Partial<{
   reportsViewLabel: boolean;
   sidebarWidth: number;
   'mobile.showSpentColumn': boolean;
+  'spending.rangeStart': string;
+  'spending.rangeEnd': string;
+  'spending.showHiddenCategories': boolean;
 }>;
 
 export type Theme = 'light' | 'dark' | 'auto' | 'midnight' | string;
