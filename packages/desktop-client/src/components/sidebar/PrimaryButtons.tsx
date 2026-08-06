@@ -11,6 +11,7 @@ import {
   SvgStoreFront,
   SvgTag,
   SvgTuning,
+  SvgViewColumn,
   SvgWallet,
 } from '@actual-app/components/icons/v1';
 import { SvgCalendar3 } from '@actual-app/components/icons/v2';
@@ -50,6 +51,7 @@ export function PrimaryButtons() {
     <View style={{ flexShrink: 0 }}>
       <Item title={t('Budget')} Icon={SvgWallet} to="/budget" />
       <Item title={t('Reports')} Icon={SvgReports} to="/reports" />
+      <Item title={t('Income/Expense')} Icon={SvgViewColumn} to="/spending" />
       <Item title={t('Schedules')} Icon={SvgCalendar3} to="/schedules" />
       <Item
         title={t('More')}
